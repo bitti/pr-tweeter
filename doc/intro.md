@@ -1,0 +1,84 @@
+# Introduction to prtweeter
+
+## Configuration
+
+The configuration is saved in [edn format](http://edn-format.org/)
+which should be pretty self-explainatory. On startup pr-tweeter first
+looks for a file called `.pr-tweeter.edn` in your current working
+directory. If this isn't found it's read from
+`$XDG_CONFIG_HOME/prtweeter.edn` if the `XDG_CONFIG_HOME` environment
+variable is set, otherwise from `$HOME/.config/pr-tweeter.edn`.
+
+If you want to use a different directory without changing
+`XDG_CONFIG_HOME` you can set it as a java system property (e.g. with
+the `-DXDG_CONFIG_HOME=/my/path/to/config` command line option to the
+`java` command).
+
+If you are a developer and need a specific config location the most
+convenient option might be to create a `.lein-env` file in the project
+root directory with these contents:
+
+    { :xdg-config-home "/my/path/to/config" }
+
+## Customizing the tweet
+
+The default template for the generated tweet is
+
+    New PR for {{repo|abbreviate:15:…}} opened by {{login|abbreviate:10:…}} on {{created_at|date:\"M/d/yy HH:mm z\":us}}: {{title|abbreviate:42:…}}. See {{html_url}}
+
+You can use all filters as specified by the [Selmer template
+system](https://github.com/yogthos/Selmer#filters) and as exemplified
+by the `created_at` date filtering above.
+
+Since date filtering is probably the most interesting usecase, the
+results of predefined format filters are demonstrated here:
+
+     Filter               Result when applied to created_at for 2018-01-02
+    -----------------------------------------------------------------------
+     no filter            Tue Jan 02 08:00:00 CST 2018
+     date:shortDate       1/2/18
+     date:shortTime       8:00 AM
+     date:shortDateTime   1/2/18 8:00 AM
+     date:mediumDate      Jan 2, 2018
+     date:mediumTime      8:00:00 AM
+     date:mediumDateTime  Jan 2, 2018 8:00:00 AM
+     date:longDate        January 2, 2018
+     date:longTime        8:00:00 AM CST
+     date:longDateTime    January 2, 2018 8:00:00 AM CST
+     date:fullDate        Tuesday, January 2, 2018
+     date:fullTime        8:00:00 AM CST
+     date:fullDateTime    Tuesday, January 2, 2018 8:00:00 AM CST
+
+Note: if you use a date filter and don't specify an explicit locale
+(e.g by appending `:us` to the filter) the locale settings of your
+environment apply.
+
+Besides the standard filters provided by Selmer the special
+`abbreviate` filter can be used to limit the length of a string. The
+first parameter to `abbreviate` specifies the maximum length, the
+second a suffix which should be used when the string needs to be
+truncated. The maxium lenght won't be exceeded even when the suffix is
+included. This is useful to avoid hitting the size limit for Twitter
+messages.
+
+The default template is designed for the old 140 character limit, but
+if the new 280 limit applies for you and you wish to have longer
+titles included you can adapt the template accordingly. Also if the
+`repo` name is implied by your twitter account its probably prudent to
+leave it out.
+
+Note: a URL always counts as 23 characters against the limit, even
+when it's shortened by the automatic Twitter URL shortener service.
+
+The list of available keywords (which can be referenced by double
+curly braces in the template)  is as follows
+
+    name        Name of the repository
+    descr       Description of the repository
+    login       Github login name of the PR creator
+    created_at  creation date/time of the PR
+    title       Title of the PR
+    html_url    The browser friendy URL to the PR
+    base        The branch against this PR was made
+    body        The main description of the PR
+    assignee    The assignee of the PR (probably empty for most new PRs)
