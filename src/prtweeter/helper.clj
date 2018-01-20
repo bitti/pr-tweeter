@@ -13,7 +13,6 @@
      (or (= (last s1) sep) (= (first s2) sep)) (str s1 s2)
      :else (str s1 sep s2)))
   ([^Character sep s1 s2 & r]
-   (println sep s1 s2 r)
    (if (empty? (rest r))
      (join-once sep (join-once sep s1 s2) (first r))
      (recur sep (join-once sep s1 s2) (first r) (rest r)))))
