@@ -74,11 +74,15 @@
             earliest-pr (config :earliest-pr)]
         (->>
          (github/get-pulls (get-in config [:github :user])
-                    (get-in config [:github :repository])
-                    earliest-pr)
+                           (get-in config [:github :repository])
+                           earliest-pr)
          reverse ; Newest PRs are listed first, but we want to publish the oldest first
          (warn-about-limit pr-limit)
          (take pr-limit)
          (reduce (get-tweeter config confirm) earliest-pr)
          (update-earliest-pr! config)
-         )))))
+         ))))
+  ;; Not sure why, but this is necessary after a
+  ;; twitter/account-verify-credentials call, even though there are no running agents left
+  (System/exit 0)
+  )

@@ -48,7 +48,5 @@
 (defn abort [message]
   "Wrapper for System/exit so it can be easily stubbed in unit tests"
   (binding [*out* *err*] (println message))
-  (throw (java.lang.RuntimeException. "abort")
-                                        ;(System/exit 1)
-         )
+  (System/exit 1)
   )

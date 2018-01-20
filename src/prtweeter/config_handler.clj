@@ -78,14 +78,10 @@
                        :access-token-secret access-token-secret
                        }
           ]
-      (println "Testing twitter connection...")
-      (abort-on-error twitter/default-error (twitter/user-info credentials))
+      (println "Verifying twitter credentials...")
+      (abort-on-error twitter/default-error (twitter/verify-credentials credentials))
       (println "OK")
       credentials)))
-
-(defn- interactive-start-date-configuration []
-  "https://github.com/rails/rails/pulls?q=is%3Aopen"
-  )
 
 (defn- create-new-config-interactively []
   (println "No configuration found. A new configuration will be created at"
@@ -97,11 +93,11 @@
                 :status-template default-template
                 }]
     (clojure.pprint/pprint config (clojure.java.io/writer user-configuration-file))
-    (println "Configuration written to" (str user-configuration-file))
+    (printf "Configuration written to %s\n\n" (str user-configuration-file))
     (-> "Please remember to keep this file at a safe location as it
     contains credentials to access your twitter account!"
         word-wrap println)
-    (prompt "Press enter to start the first query of"
+    (prompt "\nPress enter to start the first query of"
             (get-in config [:github :repository]) "for new PRs")
     (with-meta config {:file user-configuration-file})
     ))

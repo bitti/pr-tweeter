@@ -18,8 +18,8 @@
                 :access-token-secret)
           credentials)))
 
-(defn user-info [credentials]
-  (twitter/users-show :oauth-creds (credentials->oauth credentials)))
+(defn verify-credentials [credentials]
+  (twitter/account-verify-credentials :oauth-creds (credentials->oauth credentials)))
 
 (defn status-update [credentials text]
   (twitter/statuses-update
