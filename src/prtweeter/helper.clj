@@ -39,7 +39,9 @@
   (flush)
   (trim (read-line)))
 
-(defmacro abort-on-error [err-msg-fn & body]
+(defmacro abort-on-error
+  {:style/indent 1}
+  [err-msg-fn & body]
   `(try
      ~@body
      (catch Exception e# (abort (~err-msg-fn e#)))))

@@ -39,7 +39,7 @@
       (if (or (not confirm)
               (re-matches  #"[yY]|" (prompt "Do you want to publish this tweet? (y=yes, n=skip) [y]")))
         (abort-on-error twitter/default-error
-                        (twitter/status-update (config :twitter) formatted-tweet)))
+          (twitter/status-update (config :twitter) formatted-tweet)))
       (:created_at pr)
       )))
 
