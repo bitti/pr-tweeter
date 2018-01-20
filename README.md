@@ -45,15 +45,33 @@ App" at https://apps.twitter.com/app/new for your twitter account.
 To avoid spamming your account by default a maximum of 5 tweets per
 run is generated. You can change this default and other options by
 changing the configuration as explained in the extended documentation
-in [doc/intro.md](doc/intro.md).
+in [doc/configuration.md](doc/configuration.md).
 
 ## Options
 
-FIXME: listing of options this app accepts.
+If you provide the -i option you'll be asked for confirmation for each
+tweet before it is send. This might be useful if you want to test
+things out without the risk of spamming your twitter account.
 
-## Examples
+To confirm just use enter (or type 'y' before pressing enter, which is
+the default), to deny you can use 'n' and press enter.
 
-...
+## Example usages
+
+If you want to run this script in regular intervals, you could install
+it as a cron job, use the unix at(1) tool or just use a simple script
+like
+
+    while :
+    do
+        java -jar prtweeter-0.1.0-SNAPSHOT-standalone.jar
+        sleep 600 # Wait 10 minutes before next run
+    done
+
+Note that while it's up to you how frequently you want to poll github,
+the intervalls shouldn't probably be shorter than say 5 minutes in
+order to avoid hitting API limits. Even for quite busy projects this
+should be often enough though.
 
 ### Bugs
 
