@@ -37,18 +37,9 @@
     (let [formatted-tweet (format-tweet (config :status-template) pr)]
       (println "Tweeting:" formatted-tweet)
       (if (or (not confirm)
-              (= "y" (prompt "Do you want to publish this tweet? (y=yes, s=skip) [y]")))
-        (abort-on-error
-         twitter/default-error
-         (try
-           (twitter/status-update (config :twitter) formatted-tweet)
-           (catch Exception e
-             (prn e)
-             )
-
-           )
-
-         ))
+              (re-matches  #"[yY]|" (prompt "Do you want to publish this tweet? (y=yes, n=skip) [y]")))
+        (abort-on-error twitter/default-error
+                        (twitter/status-update (config :twitter) formatted-tweet)))
       (:created_at pr)
       )))
 
