@@ -4,7 +4,7 @@
             [environ.core :refer [env]]
             [prtweeter.github-client :refer [get-repository-info]]
             [prtweeter.helper :refer :all]
-            [prtweeter.twitter-client :refer [abort-on-error user-info]]
+            [prtweeter.twitter-client :as twitter]
             [rewrite-clj.zip :as z]))
 
 (def ^:const default-template
@@ -39,26 +39,20 @@
       clojure.edn/read
       ((fn [config]
          (if-not (s/valid? ::config-spec config)
-           (binding [*in* *err*]
-             (println "Problem while reading config file:")
-             (println (s/explain-str ::config-spec config))
-             (abort 1))
+           (abort (str "Problem while reading config file:\n"
+                       (s/explain-str ::config-spec config)))
            (with-meta config {:file config-file}))))
       ))
 
 (defn- interactive-github-configuration []
   (let [github-user (prompt "Github user name: ")
         github-repository (prompt "Github repository name: ")]
-    (try
-      (println "Testing github connection...")
-      (get-repository-info github-user github-repository)
-      (catch Exception e
-        (binding [*out* *err*]
-          (println "\nEncountered a problem when contacting github:\n\n"
-                   (:body (.data e))
-                   "\n\nPlease check the provided names and your network connection.")
-          (abort e)
-          )))
+    (println "Testing github connection...")
+    (abort-on-error
+     #(str "\nEncountered a problem when contacting github:\n\n"
+            (:body (.data %))
+            "\n\nPlease check the provided names and your network connection.")
+     (get-repository-info github-user github-repository))
     (println "OK")
     { :user github-user :repository github-repository }
     ))
@@ -85,7 +79,7 @@
                        }
           ]
       (println "Testing twitter connection...")
-      (abort-on-error (user-info credentials))
+      (abort-on-error twitter/default-error (twitter/user-info credentials))
       (println "OK")
       credentials)))
 

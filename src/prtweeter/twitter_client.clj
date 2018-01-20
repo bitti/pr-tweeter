@@ -3,15 +3,9 @@
             [twitter.api.restful :as twitter]
             [twitter.oauth :as twitter-oauth]))
 
-(defmacro abort-on-error [body]
-  `(try
-     ~body
-     (catch Exception e#
-       (binding [*out* *err*]
-         (println "\nEncountered a problem when contacting twitter:\n\n" (str e#)
-                  "\n\nPlease check the provided credentials and your network connection.")
-         (abort e#)
-         ))))
+(defn default-error [e]
+  (str "\nEncountered a problem when contacting twitter:\n\n" e
+       "\n\nPlease check the provided credentials and your network connection."))
 
 (defn- credentials->oauth [credentials]
   (apply twitter-oauth/make-oauth-creds

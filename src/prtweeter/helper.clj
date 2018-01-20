@@ -40,7 +40,15 @@
   (flush)
   (trim (read-line)))
 
-(defn abort [e]
+(defmacro abort-on-error [err-msg-fn & body]
+  `(try
+     ~@body
+     (catch Exception e# (abort (~err-msg-fn e#)))))
+
+(defn abort [message]
   "Wrapper for System/exit so it can be easily stubbed in unit tests"
-  (System/exit 1)
+  (binding [*out* *err*] (println message))
+  (throw (java.lang.RuntimeException. "abort")
+                                        ;(System/exit 1)
+         )
   )

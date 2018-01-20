@@ -1,13 +1,14 @@
 (ns prtweeter.core
   (:gen-class)
-  (:require [prtweeter.config-handler :refer [get-config update-earliest-pr!]]
-            [prtweeter.github-client :refer [get-pulls]]
-            [prtweeter.helper :refer [abort]]
-            [prtweeter.twitter-client :refer [status-update abort-on-error]]
+  (:require [clojure.string :refer [join]]
+            [clojure.tools.cli :refer [parse-opts summarize]]
+            [prtweeter.config-handler :refer [get-config update-earliest-pr!]]
+            [prtweeter.helper :refer :all]
+            [prtweeter.twitter-client :as twitter]
+            [prtweeter.github-client :as github]
             [selmer.filters :refer [add-filter!]]
             [selmer.parser :refer [render]]
-            [selmer.util :refer [without-escaping]])
-  (:import java.lang.Exception))
+            [selmer.util :refer [without-escaping]]))
 
 ;; Not part of the selmer standard filters, therefore we roll our own
 (add-filter! :abbreviate
@@ -36,30 +37,57 @@
     (let [formatted-tweet (format-tweet (config :status-template) pr)]
       (println "Tweeting:" formatted-tweet)
       (if (or (not confirm)
-              (= "y" (print "Do you want to publish this tweet? (y=yes, s=skip) [y]")))
-        (abort-on-error (status-update (config :twitter) formatted-tweet)))
+              (= "y" (prompt "Do you want to publish this tweet? (y=yes, s=skip) [y]")))
+        (abort-on-error
+         twitter/default-error
+         (try
+           (twitter/status-update (config :twitter) formatted-tweet)
+           (catch Exception e
+             (prn e)
+             )
+
+           )
+
+         ))
       (:created_at pr)
       )))
 
 (def cli-options
   [["-i" nil "Interactive mode to confirm or skip individual tweets"
-    :default false
-    ]]
+    :id :interactively
+    :default false]
+   ["-h" "--help"]]
   )
+
+(defn- parse-options [args]
+  (parse-opts
+   args cli-options
+   :summary-fn
+   #(str "prtweeter - Tweet new github pull requests\n\nValid options:\n" (summarize %))
+   ))
 
 (defn -main
   [& args]
-  (let [confirm false
-        config (get-config)
-        pr-limit (config :pr-limit-per-run)
-        earliest-pr (config :earliest-pr)]
-    (->>
-     (get-pulls (get-in config [:github :user])
-                (get-in config [:github :repository])
-                earliest-pr)
-     reverse ; Newest PRs are listed first, but we want to publish the oldest first
-     (warn-about-limit pr-limit)
-     (take pr-limit)
-     (reduce (get-tweeter config confirm) earliest-pr)
-     (update-earliest-pr! config)
-     )))
+  (let [options (parse-options args)]
+    (cond
+      (:errors options)
+      (abort (str (join "\n" (:errors options)) "\n\n" (:summary options)))
+
+      (:help (:options options))
+      (println (:summary options))
+
+      :else
+      (let [confirm (:interactively (:options options))
+            config (get-config)
+            pr-limit (config :pr-limit-per-run)
+            earliest-pr (config :earliest-pr)]
+        (->>
+         (github/get-pulls (get-in config [:github :user])
+                    (get-in config [:github :repository])
+                    earliest-pr)
+         reverse ; Newest PRs are listed first, but we want to publish the oldest first
+         (warn-about-limit pr-limit)
+         (take pr-limit)
+         (reduce (get-tweeter config confirm) earliest-pr)
+         (update-earliest-pr! config)
+         )))))
