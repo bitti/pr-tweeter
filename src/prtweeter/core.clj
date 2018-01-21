@@ -22,12 +22,10 @@
 (defn- tee [f seq] (f seq) seq)
 
 (defn- warn-about-limit [pr-limit seq]
-  (tee
-   (fn [seq]
-     (let [c (count seq)]
-       (when (> c pr-limit)
-         (println "Found" c "new PRs but will only publish the configured limit of" pr-limit "per run"))))
-   seq))
+  (let [c (count seq)]
+    (when (> c pr-limit)
+      (println "Found" c "new PRs but will only publish the configured limit of" pr-limit "per run")))
+  seq)
 
 (defn- get-tweeter
   "Returns a reducing function which conditionally tweets as a side
@@ -82,7 +80,5 @@
          (reduce (get-tweeter config confirm) earliest-pr)
          (update-earliest-pr! config)
          ))))
-  ;; Not sure why, but this is necessary after a
-  ;; twitter/account-verify-credentials call, even though there are no running agents left
-  (System/exit 0)
-  )
+  ;; See https://github.com/adamwynne/twitter-api/issues/74#issuecomment-285952730
+  (http/close (twitter.core/default-client)))
