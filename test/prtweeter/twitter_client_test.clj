@@ -1,7 +1,6 @@
 (ns prtweeter.twitter-client-test
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as gen]
-            [com.rpl.specter :as sp]
             [midje.sweet :refer :all]
             [prtweeter.config-handler :refer :all]
             [prtweeter.twitter-client :as sut]))
@@ -68,6 +67,9 @@
      {:status ((promise) {:code 200})
       :error (promise)
       :done ((promise) true)
+
+      ;; Note: of course a successful requests doesn't return an error
+      ;; code, but we want to test here that only HTTP status codes trigger errors
       :body ((promise) "{ \"code\": 187, \"errors\": [\"Duplicate message error message\"]}")
       }
      ))

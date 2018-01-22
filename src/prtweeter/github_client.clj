@@ -1,6 +1,5 @@
 (ns prtweeter.github-client
   (:require [clj-http.client :as http]
-            [com.rpl.specter :as sp]
             [prtweeter.helper :refer :all]))
 
 (def ^:const github-api-url "https://api.github.com/repos")
@@ -29,7 +28,7 @@
     (->> response
 
          ;; Transform the created_at fields into actual 'inst' instances
-         (sp/transform [sp/ALL :created_at] clojure.instant/read-instant-date)
+         (map #(update % :created_at clojure.instant/read-instant-date))
 
          ;; Filter by 'begin' cutoff date
          (filter #(> 0 (compare start (:created_at %))))

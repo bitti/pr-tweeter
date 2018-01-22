@@ -7,7 +7,6 @@
                  [clj-http "3.7.0"]
                  [cheshire "5.8.0"] ;; for :as :json
                  [slingshot "0.12.2"]
-                 [com.rpl/specter "1.0.5"]
                  [clojure-future-spec "1.9.0-beta4"]
                  [org.clojure/test.check "0.9.0"] ;; For generators
                  [org.clojure/tools.logging "0.4.0"]
