@@ -75,7 +75,6 @@
          (github/get-pulls (get-in config [:github :user])
                            (get-in config [:github :repository])
                            earliest-pr)
-         reverse ; Newest PRs are listed first, but we want to publish the oldest first
          (warn-about-limit pr-limit)
          (take pr-limit)
          (reduce (get-tweeter config confirm) earliest-pr)

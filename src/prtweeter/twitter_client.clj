@@ -21,6 +21,13 @@
 (defn verify-credentials [credentials]
   (twitter/account-verify-credentials :oauth-creds (credentials->oauth credentials)))
 
+(defn skip-duplicates-callback [response]
+  (if-let [duplicate-error
+           (some (fn [error] (and (= (error "code") 187) error))
+                 ((clojure.data.json/read-str (str @(:body response))) "errors"))]
+    (printf "Got '%s' Skipping\n" (duplicate-error "message"))
+    (response-throw-error response)))
+
 (defn status-update [credentials text]
   (twitter/statuses-update
    :oauth-creds (credentials->oauth credentials)
@@ -28,11 +35,6 @@
    :on-exception (fn [response] (print "GOT" response))
    :callbacks (SyncSingleCallback.
                response-return-body
-               (fn [response]
-                 (if-let [duplicate-error
-                          (some (fn [error] (and (= (error "code") 187) error))
-                                ((clojure.data.json/read-str (str @(:body response))) "errors"))]
-                   (printf "Got '%s' Skipping\n" (duplicate-error "message"))
-                   (response-throw-error response)))
+               skip-duplicates-callback
                exception-rethrow)
   ))
