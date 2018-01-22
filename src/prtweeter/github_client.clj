@@ -6,7 +6,7 @@
 
 (defn- query-pulls [user repository]
   (http/get (join-once \/ github-api-url user repository "pulls")
-            {:as :auto
+            {:as :json
              :accept "application/vnd.github.v3+json"}))
 
 (defn get-repository-info
@@ -15,7 +15,7 @@
 
   ;; See https://developer.github.com/v3/repos/#get
   (http/get (join-once \/ github-api-url user repository)
-            {:as :auto
+            {:as :json
              :accept "application/vnd.github.v3+json"}))
 
 (defn get-pulls

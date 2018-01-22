@@ -13,7 +13,7 @@
               testdate (gen/generate (s/gen :prtweeter.config-handler/earliest-pr))
               updated-config (assoc testconfig :earliest-pr testdate)
               comment ";; A random comment\n"]
-          (fact "updates :earliest-pr in place"
+          (fact "updates :earliest-pr in place while preserving whitespace and comments"
             (sut/update-earliest-pr! (with-meta testconfig {:file "filename"}) testdate) => nil
 
             (provided (slurp "filename") => (str comment (pr-str testconfig)))

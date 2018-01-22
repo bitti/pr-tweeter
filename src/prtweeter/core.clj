@@ -20,8 +20,6 @@
   (without-escaping
    (render template attributes)))
 
-(defn- tee [f seq] (f seq) seq)
-
 (defn- warn-about-limit [pr-limit seq]
   (let [c (count seq)]
     (when (> c pr-limit)
