@@ -1,6 +1,7 @@
 (ns prtweeter.twitter-client-test
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as gen]
+            [com.rpl.specter :as sp]
             [midje.sweet :refer :all]
             [prtweeter.config-handler :refer :all]
             [prtweeter.twitter-client :as sut]))
@@ -42,3 +43,51 @@
       :body ((promise) "{ \"code\": 187, \"errors\": [\"Duplicate message error message\"]}")
       }
      )))
+
+(def verified-credentials-answer
+  {:headers :some-headers
+   :status {:code 200, :msg "OK", :protocol "HTTP/1.1", :major 1, :minor 1},
+   :body :some-json-parsed-answer})
+
+(facts "About verify credentials"
+
+  (fact "Returns answer on status code 200"
+    (sut/verify-credentials (gen/generate (s/gen :prtweeter.config-handler/twitter)))
+    => verified-credentials-answer
+
+    (provided
+     (twitter.callbacks.handlers/response-return-everything anything) => verified-credentials-answer)
+    (provided
+     (http.async.client.request/execute-request
+      anything anything
+      :status anything
+      :headers anything
+      :part anything
+      :completed anything
+      :error anything) =>
+     {:status ((promise) {:code 200})
+      :error (promise)
+      :done ((promise) true)
+      :body ((promise) "{ \"code\": 187, \"errors\": [\"Duplicate message error message\"]}")
+      }
+     ))
+  (fact "Throws exception on error code"
+
+    (sut/verify-credentials (gen/generate (s/gen :prtweeter.config-handler/twitter)))
+    => (throws "verify credentials error")
+
+    (provided
+     (http.async.client.request/execute-request
+      anything anything
+      :status anything
+      :headers anything
+      :part anything
+      :completed anything
+      :error anything) =>
+     {:status ((promise) {:code 403})
+      :error ((promise) (ex-info "verify credentials error" {}))
+      :done ((promise) true)
+      :body ((promise) "{ \"code\": 187, \"errors\": [\"Duplicate message error message\"]}")
+      }
+     ))
+    )
