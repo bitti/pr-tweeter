@@ -71,8 +71,8 @@
       :body ((promise) "{ \"code\": 187, \"errors\": [\"Duplicate message error message\"]}")
       }
      ))
-  (fact "Throws exception on error code"
 
+  (fact "Throws exception on error code"
     (sut/verify-credentials (gen/generate (s/gen :prtweeter.config-handler/twitter)))
     => (throws "verify credentials error")
 
