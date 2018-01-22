@@ -2,10 +2,11 @@
   (:gen-class)
   (:require [clojure.string :refer [join]]
             [clojure.tools.cli :refer [parse-opts summarize]]
+            [http.async.client :as http]
             [prtweeter.config-handler :refer [get-config update-earliest-pr!]]
+            [prtweeter.github-client :as github]
             [prtweeter.helper :refer :all]
             [prtweeter.twitter-client :as twitter]
-            [prtweeter.github-client :as github]
             [selmer.filters :refer [add-filter!]]
             [selmer.parser :refer [render]]
             [selmer.util :refer [without-escaping]]))
