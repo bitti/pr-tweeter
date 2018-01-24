@@ -111,10 +111,7 @@
         (-> configuration-file
             slurp
             z/of-string
-            z/down
-            (z/find-value :earliest-pr)
-            z/next
-            (z/replace date)
+            (z/assoc :earliest-pr date)
             )]
     (println "Update" (str configuration-file))
     (with-open [w (clojure.java.io/writer configuration-file)]
