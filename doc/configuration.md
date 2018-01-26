@@ -57,7 +57,7 @@ number you can do so with the `:pr-limit-per-run` setting.
 
 The default template for the generated tweet is
 
-    New PR for {{repo|abbreviate:15:…}} opened by {{login|abbreviate:10:…}} on {{created_at|date:\"M/d/yy HH:mm z\":us}}: {{title|abbreviate:42:…}}. See {{html_url}}
+    {{name|abbr-ellipsis:…|abbreviate:15}} PR by {{login|abbr-ellipsis:…|abbreviate:12}} on {{created_at|date:\"M/d/yy HH:mm z\":us}}: {{title|abbr-ellipsis:…|abbreviate:60}} {{html_url}}
 
 You can use all filters as specified by the [Selmer template
 system](https://github.com/yogthos/Selmer#filters) and as exemplified
