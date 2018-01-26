@@ -86,14 +86,6 @@ Note: if you use a date filter and don't specify an explicit locale
 (e.g by appending `:us` to the filter) the locale settings of your
 environment apply.
 
-Besides the standard filters provided by Selmer the special
-`abbreviate` filter can be used to limit the length of a string. The
-first parameter to `abbreviate` specifies the maximum length, the
-second a suffix which should be used when the string needs to be
-truncated. The maximum length won't be exceeded even when the suffix is
-included. This is useful to avoid hitting the size limit for Twitter
-messages.
-
 The default template is designed for the old 140 character limit, but
 if the new 280 limit applies for you and you wish to have longer
 titles included you can adapt the template accordingly. Also if the

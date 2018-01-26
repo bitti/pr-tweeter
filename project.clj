@@ -11,7 +11,7 @@
                  [midje "1.9.1"]
                  [environ "1.1.0"]
                  [twitter-api "1.8.0"]
-                 [selmer "1.11.5" :exclusions [joda-time]]
+                 [selmer "1.11.6" :exclusions [joda-time]]
                  [rewrite-clj "0.6.0"]
                  [org.slf4j/slf4j-simple "1.7.12"]
                  ]

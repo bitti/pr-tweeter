@@ -17,14 +17,6 @@
      (join-once sep (join-once sep s1 s2) (first r))
      (recur sep (join-once sep s1 s2) (first r) (rest r)))))
 
-(defn abbreviate
-  [string maxlength suffix]
-  {:pre [(>= maxlength (count suffix))]}
-  (if (> (count string) maxlength)
-    (str (subs string 0 (- maxlength (count suffix))) suffix)
-    string)
-  )
-
 (defn word-wrap
   "Wraps the given text along whitespace boundaries by given
   width (defaults to 72 if not supplied)."

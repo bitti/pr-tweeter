@@ -8,7 +8,7 @@
             [rewrite-clj.zip :as z]))
 
 (def ^:const default-template
-  "{{name|abbreviate:15:…}} PR by {{login|abbreviate:12:…}} on {{created_at|date:\"M/d/yy HH:mm z\":us}}: {{title|abbreviate:60:…}} {{html_url}}")
+  "{{name|abbr-ellipsis:\"…\"|abbreviate:15}} PR by {{login|abbr-ellipsis:…|abbreviate:12}} on {{created_at|date:\"M/d/yy HH:mm z\":us}}: {{title|abbr-ellipsis:…|abbreviate:60}} {{html_url}}")
 (def ^:const default-limit 5)
 (def ^:const xdg-config-home (join-once \/ (env :home) ".config"))
 

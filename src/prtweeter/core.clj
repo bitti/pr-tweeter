@@ -11,11 +11,6 @@
             [selmer.parser :refer [render]]
             [selmer.util :refer [without-escaping]]))
 
-;; Not part of the selmer standard filters, therefore we roll our own
-(add-filter! :abbreviate
-             (fn [str maxlength suffix]
-               (prtweeter.helper/abbreviate str (Integer/valueOf maxlength) suffix)))
-
 (defn format-tweet [template attributes]
   (without-escaping
    (render template attributes)))
