@@ -5,3 +5,4 @@ All notable changes to this project will be documented in this file. This change
 
 Initial release
 
+[0.1.0]: https://github.com/bitti/pr-tweeter/tree/v0.0.1

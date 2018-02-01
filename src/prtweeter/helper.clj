@@ -38,8 +38,9 @@
      ~@body
      (catch Exception e# (abort (~err-msg-fn e#)))))
 
-(defn abort [message]
+(defn abort
   "Wrapper for System/exit so it can be easily stubbed in unit tests"
+  [message]
   (binding [*out* *err*] (println message))
   (System/exit 1)
   )

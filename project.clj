@@ -1,4 +1,4 @@
-(defproject prtweeter "0.1.0"
+(defproject prtweeter "0.1.1-SNAPSHOT"
   :description "Tweet new pull requests in Github"
   :url "https://github.com/bitti/pr-tweeter"
   :license {:name "Eclipse Public License"

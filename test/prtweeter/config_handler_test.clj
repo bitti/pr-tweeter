@@ -20,8 +20,9 @@
           (str w) => (str comment (pr-str updated-config))))
       )) => "Update ...some-file...\nOK\n")
 
-(defmacro with-files [files & body]
+(defmacro with-files
   "Try to remove some cruft from test setup with this macro"
+  [files & body]
   `(with-out-str
     (with-redefs
       [sut/local-configuration-file (proxy [java.io.File] ["first location"]
