@@ -68,7 +68,7 @@
     (-> "This App doesn't support automatic OAuth token acquisition
     (yet). Please use the 'Keys and Access Tokens' tab in the twitter
     application settings and use the 'Create my access token' button
-    to create an 'Access Token' and 'Access Tocken Secret'"
+    to create an 'Access Token' and 'Access Token Secret'"
         word-wrap println)
     (let [access-token (prompt "Access Token: ")
           access-token-secret (prompt "Access Token Secret: ")

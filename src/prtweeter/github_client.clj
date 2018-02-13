@@ -31,7 +31,7 @@
          (map #(update % :created_at clojure.instant/read-instant-date))
 
          ;; Filter by 'begin' cutoff date
-         (filter #(> 0 (compare start (:created_at %))))
+         (filter #(neg? (compare start (:created_at %))))
 
          ;; extract only relevant fields
          (map #(merge (select-keys % [:html_url :state :created_at :body :title])

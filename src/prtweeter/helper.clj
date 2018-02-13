@@ -3,10 +3,10 @@
             [clojure.string :refer [split trim]]))
 
 (defn join-once
-  "Joins at least two strings by the given separator but avoids
-  repetitions of the separator at the join points. Empty strings or
-  strings consisting only of the join character are - in effect -
-  ignored. Only single character separators are supported."
+  "Joins two or more strings by sep but avoids repetitions of the
+  separator at join points. Empty strings or strings consisting only
+  of the join character are - in effect - ignored. Only single
+  character separators are supported."
   ([^Character sep s1 s2]
    (cond
      (= sep (last s1) (first s2)) (str s1 (subs s2 1))
@@ -39,7 +39,7 @@
      (catch Exception e# (abort (~err-msg-fn e#)))))
 
 (defn abort
-  "Wrapper for System/exit so it can be easily stubbed in unit tests"
+  "Wrapper for `System/exit` so it can be easily stubbed in unit tests"
   [message]
   (binding [*out* *err*] (println message))
   (System/exit 1)

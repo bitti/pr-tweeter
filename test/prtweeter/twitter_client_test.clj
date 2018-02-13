@@ -14,7 +14,7 @@
       }) => nil
     (provided (clojure.core/printf #"Skipping" anything) => nil))
 
-  (fact "Other errors throw exeptions"
+  (fact "Other errors throw exceptions"
     (sut/skip-duplicates-callback
      {:status ((promise) { :code 403 })
       :body ((promise)

@@ -33,8 +33,8 @@ On some systems like Linux you can also make the jar executable
     $ chmod +x prtweeter-0.1.0-SNAPSHOT-standalone.jar
 
 and start it like any other executable in a terminal. (It's not
-advisible to just click the jar in a graphical environment, the App is
-expecting a commandline environment.)
+advisible to just click the jar in a graphical environment, since the
+App is expecting a commandline environment.)
 
 On first start you'll be asked for necessary configuration parameters.
 These are a github username and repository (which don't have to be

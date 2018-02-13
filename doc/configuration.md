@@ -38,8 +38,8 @@ In order to avoid publishing old PRs just because they are open a date
 filter is applied. The initial earliest date considered is the time
 when the configuration is created first. You might want to change this
 default e.g. if you want to publish earlier PRs or only later ones.
-You can configure this date via the `:earliest-pr`, whereas the
-conventions of [RFC3999](https://tools.ietf.org/html/rfc3339) are
+You can configure this date via the `:earliest-pr` setting, whereas
+the conventions of [RFC3999](https://tools.ietf.org/html/rfc3339) are
 followed for the date format.
 
 Please keep in mind that these date is updated to the opening date of

@@ -26,7 +26,7 @@
              ;; Old PR which should be filtered out
              {
               :created_at "2016-09-30T08:36:10Z"
-              :user { :login "requestor" }
+              :user { :login "requester" }
               :base { :repo { :name "repo" :description "Repo" } :ref "master" }
               :assignee { :login "repo-owner" }
               }
@@ -38,7 +38,7 @@
               :body "a new PR"
               :title "bugfixes etc."
               :created_at "2016-10-20T08:36:10Z"
-              :user { :login "requestor" }
+              :user { :login "requester" }
               :base { :repo { :name "repo" :description "Repo" } :ref "master" }
               :assignee { :login "repo-owner" }
               }

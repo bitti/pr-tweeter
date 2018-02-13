@@ -22,8 +22,8 @@
            (count
             (format-tweet default-template
              {
-              :name (** "100-chars-" 10) ; Maxium repo name length on github
-              :login (** "X" 39)         ; Maxium user login name
+              :name (** "100-chars-" 10) ; Maximum repo name length on github
+              :login (** "X" 39)         ; Maximum user login name
               :created_at #inst "2018-01-02"
               :html_url (** "x" 23)     ; Fixed effective length for URLs on twitter
               :title (** "1000-chars" 100)
